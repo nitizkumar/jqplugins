@@ -12,7 +12,7 @@
 	class SelectPlugin
 
 		defaults:
-			paramA: 'foo'
+			searchable: false
 			paramB: 'bar'
 
 		constructor: (el, options) ->
@@ -29,9 +29,13 @@
 			
 			parent = @$el.parent()
 
-			@$el.parent().append('<div class="customSelectLabel"><label>aaa<label></div>')		
-				
+
 			@$el.parent().append('<div class="customSelect"></div>')		
+
+			@$el.parent().append('<div class="customSelectLabel"><label>aaa<label></div>')		
+
+			if @options.searchable	
+				@$el.siblings('.customSelect').append('<div class="customSelectSearch"><input type="text"/></div>')
 
 			dropdown = parent.find('.customSelect')
 				
@@ -72,13 +76,24 @@
 				$(self.$el).val selectedValue
 				$(self.$el).change(event)
 
-			$(@$el).addClass('hidden')	  	      
+			@$el.addClass('hidden')	  	      
 
 			if selectedLabel.trim().length == 0
 				selectedLabel = @$el.find('option:eq(0)').text
 
-			$(@$el).siblings('.customSelectLabel').find('label').text selectedLabel		
+			@$el.siblings('.customSelectLabel').find('label').text selectedLabel		
 			
+			if @options.searchable	
+				parent.find('.customSelectSearch input').keyup (event)->
+					val = $(@).val()
+					re = new RegExp(val,'i')
+					parent.find('li').each (i,elem)->
+						txt = $(elem).text()
+						if re.exec(txt) is null
+							$(elem).hide()
+						else
+							$(elem).show()	
+
 			return 
 								
 	# Define the plugin
@@ -86,7 +101,6 @@
 		@each ->
 			$this = $(this)
 			data = $this.data('selectPlugin')
-
 			if !data
 				$this.data 'selectPlugin', (data = new SelectPlugin(this, option))
 			if typeof option == 'string'

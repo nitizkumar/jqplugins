@@ -5,7 +5,7 @@ var __slice = [].slice;
   var SelectPlugin;
   SelectPlugin = (function() {
     SelectPlugin.prototype.defaults = {
-      paramA: 'foo',
+      searchable: false,
       paramB: 'bar'
     };
 
@@ -20,8 +20,11 @@ var __slice = [].slice;
       self = this;
       this.$el.wrap('<div class="customSelectContainer"></div>');
       parent = this.$el.parent();
-      this.$el.parent().append('<div class="customSelectLabel"><label>aaa<label></div>');
       this.$el.parent().append('<div class="customSelect"></div>');
+      this.$el.parent().append('<div class="customSelectLabel"><label>aaa<label></div>');
+      if (this.options.searchable) {
+        this.$el.siblings('.customSelect').append('<div class="customSelectSearch"><input type="text"/></div>');
+      }
       dropdown = parent.find('.customSelect');
       container = this.$el.siblings('.customSelect').append('<ul></ul>');
       selectedLabel = '';
@@ -57,11 +60,27 @@ var __slice = [].slice;
         $(self.$el).val(selectedValue);
         return $(self.$el).change(event);
       });
-      $(this.$el).addClass('hidden');
+      this.$el.addClass('hidden');
       if (selectedLabel.trim().length === 0) {
         selectedLabel = this.$el.find('option:eq(0)').text;
       }
-      $(this.$el).siblings('.customSelectLabel').find('label').text(selectedLabel);
+      this.$el.siblings('.customSelectLabel').find('label').text(selectedLabel);
+      if (this.options.searchable) {
+        parent.find('.customSelectSearch input').keyup(function(event) {
+          var re, val;
+          val = $(this).val();
+          re = new RegExp(val, 'i');
+          return parent.find('li').each(function(i, elem) {
+            var txt;
+            txt = $(elem).text();
+            if (re.exec(txt) === null) {
+              return $(elem).hide();
+            } else {
+              return $(elem).show();
+            }
+          });
+        });
+      }
     };
 
     return SelectPlugin;

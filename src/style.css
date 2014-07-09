@@ -52,21 +52,30 @@
 	z-index: 1091;
 	width: 99%;
 	border: 1px solid #ccc;
-	max-height: 70vh;
-	overflow: auto;	
+
 }
 .customSelectContainer .customSelect ul{
 	padding: 0px;
 	padding-left:5px;
+	max-height: 70vh;
+	overflow: auto;	
 }
 .customSelectContainer .customSelect li{
 	list-style: none;
 	border-bottom:1px dashed #ccc;
 }
+.customSelectContainer .customSelect li:hover{
+	background-color: #ccc;
+}
 .customSelectContainer .customSelect li:last-child{
 	border-bottom:none;	
 }
-
+.customSelectSearch{
+	margin: 2px;
+}
+.customSelectSearch input{
+	width: 100%;
+}
 
 .customCheckboxContainer{
 	display: inline-block;
