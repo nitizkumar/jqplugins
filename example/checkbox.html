@@ -1,0 +1,22 @@
+<html>
+<head>
+	<link rel="stylesheet" href="">
+	<script src="./../lib/jquery-1.11.0.min.js"></script>
+	<script src="./../src/checkbox.js"></script>
+	<link rel="stylesheet" type="text/css" href="./../src/style.css">
+</head>
+<body>
+
+<input type="checkbox" id="1"/>
+<label for="1">adaad</label>
+
+	<script>
+	$(document).ready(function(){
+		$('input').customCheckbox();		
+		$('input').click(function(){
+			console.log($(this).is(':checked'));
+		});
+	});
+	</script>
+</body>
+</html>
